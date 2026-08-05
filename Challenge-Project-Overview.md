@@ -42,6 +42,7 @@ This project presents a solid opportunity to engage students in a high-impact, r
 
 **Company / Org:** Amazon Web Services  
 **Challenge Advisor:** Megan McKenzie, megankaymckenzie@gmail.com  
+**AI Studio Coach:** Julio Contreras, Julio.Contreras@breakthroughtech.org   
 **Program:** Break Through Tech AI Studio - Fall 2026
 
 ---
