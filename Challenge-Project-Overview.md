@@ -59,7 +59,17 @@ Amazon Web Services (AWS) provides cloud computing services to businesses and or
 In this project, you will use spatial-temporal oceanographic and atmospheric tabular data, as well as advanced machine learning techniques (such as Gradient Boosted Trees and time-series feature engineering) to build a predictive risk model that forecasts Sea Surface Temperature Anomalies (SSTAs) and classifies climate risk thresholds months in advance. This will help our organization address the severe supply chain disruptions, logistics delays, and infrastructure vulnerabilities caused by global climate events like the El Niño-Southern Oscillation (ENSO).
 
 ### Success Criteria
-Pipeline completeness (modular pipeline for ingestion/cleaning), predictive performance (Macro F1-Score), model interpretability (SHAP/feature importance), and professional handoff.
+
+Pipeline Completeness: A modular pipeline that ingests raw data from the UCI El Niño repository, cleans sensor logs using programmatic imputation, and splits data into train, validation, and test partitions.
+
+Predictive Performance: A classification model that significantly outperforms a naive baseline. It will be evaluated using the Macro F1-Score to ensure it accurately predicts rare, high-impact climate anomalies (extreme warming/cooling spikes) rather than just the majority "normal" states.
+
+Model Interpretability: Inclusion of feature importance or SHAP value plots to visually explain to business stakeholders exactly which variables (like wind vectors or subsurface temperatures) are driving the risk flags.
+
+Professional Handoff: A clean, open-source GitHub repository featuring a clear data dictionary in the README.md, well-commented code, and a final presentation translating technical findings into business insights.
+
+### Stretch Goals
+Explore basic recurrent architectures like temporal LSTMs (PyTorch) or wrapping the model into a minimal interactive dashboard interface (Streamlit or Gradio) to demonstrate real-time risk scoring for organizational stakeholders.
 
 ### Project Milestones
 
@@ -67,9 +77,11 @@ Use these milestones to guide your work. Your team will create a **GitHub Projec
 
 | Month | Milestone | Key Activities |
 |-------|-----------|----------------|
-| **September** | Data Understanding | Explore dataset, handle missing values, document findings |
-| **October** | Model Development | Train baseline model, experiment with approaches, iterate |
-| **November** | Evaluation & Presentation | Finalize model, prepare presentation, document results |
+| **September** | [Title] | Deconstruct the business problem, initialize the coding environment, and build the structural blueprint.
+Deliverable: A technical scoping document mapping out individual team roles, task distributions, and initial data loading confirmations. |
+| **October** | [Title] | Clean the raw dataset and engineer robust predictive features. Begin to train, tune, and evaluate machine learning architectures to predict and classify risk. Deliverable: A reproducible, modular preprocessing script that outputs cleaned, scaled, and split train/validation sets. |
+| **November** | [Title] | Continue to train, tune, and evaluate machine learning architectures to predict and classify risk and finalize the codebase to professional open-source standards and present the solution.
+Deliverable: Serialized model weights/artifacts accompanied by a validation leaderboard detailing model performance. Also a clean, production-grade GitHub repository and a live final presentation delivered to the corporate leadership team. |
 
 > **Note for the team:** Please create a GitHub Projects board in this repository to break these milestones into weekly tasks. Go to the **Projects** tab → **New project** → Choose **Board** → Add columns for each month.
 
@@ -91,17 +103,13 @@ Use these milestones to guide your work. Your team will create a **GitHub Projec
 
 ## 🛠️ Suggested Approach
 
-**ML Problem Type:** Classification and Regression
+**ML Problem Type:** Classification, Regression, Time Series Analysis
 
 **Recommended Libraries:**
-- Gradient Boosted Trees
-- time-series feature engineering
-- PyTorch (LSTMs)
-- Streamlit
-- Gradio
+- [e.g., pandas, scikit-learn, TensorFlow, Hugging Face]
 
 **Evaluation Metrics:**
-- Macro F1-Score, model interpretability (SHAP/feature importance)
+- [e.g., Accuracy, Precision/Recall, RMSE, BLEU score]
 
 ---
 
