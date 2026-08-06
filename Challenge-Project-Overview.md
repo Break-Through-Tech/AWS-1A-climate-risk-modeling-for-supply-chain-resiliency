@@ -49,7 +49,7 @@ This project presents a solid opportunity to engage students in a high-impact, r
 
 ## 🏢 About Amazon Web Services
 
-Amazon Web Services (AWS) provides cloud computing services to businesses and organizations globally, enabling them to innovate and scale applications quickly and efficiently. Our department focuses on solutions that leverage data analytics and machine learning to enhance operational insights and decision-making.
+Amazon Web Services (AWS) provides cloud computing services to businesses and organizations globally, enabling them to innovate and scale applications quickly and efficiently. 
 
 ---
 
