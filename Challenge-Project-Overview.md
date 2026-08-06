@@ -116,19 +116,19 @@ Use these milestones to guide your work. Your team will create a **GitHub Projec
 The following resources will help your team understand the problem space and potential technical approaches for this project:
 
 **Background Reading:**
-- [Understanding Climate Change and El Niño](https://www.climate.gov/news-features/understanding-climate/what-el-nio)
-- [Recent Trends in Climate Data Analysis](https://www.ipcc.ch/report/ar6/wg1/)
+- [e.g., Link to an article or blog post about the problem domain]
+- [e.g., Link to an industry report or case study]
 
 **Technical Tutorials:**
-- [Time Series Forecasting with Python](https://towardsdatascience.com/time-series-forecasting-with-python-e5b068d2929a)
-- [Introduction to SHAP for Model Interpretability](https://towardsdatascience.com/introduction-to-shap-the-lower-intelligence-scaling-army-678a0c49ac9e)
+- [e.g., Link to a free tutorial on the ML technique(s) involved]
+- [e.g., Link to documentation for a key library or tool]
 
 **Code Examples:**
-- [Climate Risk Modeling Code Implementation](https://github.com/example/climate-risk-model)
-- [Sample LSTM Implementation](https://github.com/example/lstm-time-series-prediction)
+- [e.g., Link to a relevant GitHub repo]
+- [e.g., Link to a sample implementation or starter code]
 
 **Other:**
-- [Research Papers on Climate Modeling](https://www.sciencedirect.com/topics/earth-and-planetary-sciences/climate-modeling)
+- [Links to any additional resources — e.g., papers, videos, podcasts, etc.]
 
 *Feel free to explore beyond these, and share anything interesting you find with me!*
 
