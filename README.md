@@ -1,6 +1,6 @@
 # Climate Risk Modeling for Supply Chain Resiliency
 
-Predicting Sea Surface Temperature Anomalies (SSTAs) and classifying climate risk thresholds months in advance using spatial-temporal oceanographic data and gradient boosted machine learning architectures.
+A predictive risk model that classifies climate anomalies from Pacific buoy sensor data and gives organizations months of lead time before supply chain disruptions hit.
 
 ## Business Problem
 
