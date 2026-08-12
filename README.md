@@ -91,6 +91,7 @@ The dataset doesn't come with a pre-labeled target variable. The target would be
 
 - Python 3.10+
 - pip or conda
+- A virtual environment
 
 ### Installation
 
