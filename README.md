@@ -55,7 +55,7 @@ The dataset contains spatial-temporal oceanographic and atmospheric measurements
 | October | Modular preprocessing script | Clean the raw dataset, engineer time-series features, implement programmatic imputation, produce reproducible train/validation/test splits |
 | November | Final model, repository, and presentation | Train and tune models, serialize model artifacts, generate SHAP plots and a validation leaderboard, finalize a production-grade GitHub repo, deliver a live presentation to leadership |
 
-## Repository Structure
+## EXAMPLE Repository Structure
 
 ```
 .
@@ -79,6 +79,14 @@ The dataset contains spatial-temporal oceanographic and atmospheric measurements
 
 ## Getting Started
 
+### Target variable
+
+The dataset doesn't come with a pre-labeled target variable. The target would be climate risk class derived from Sea Surface Temperature Anomalies (SSTAs). An example is:
+
+  - Normal: SSTA within a threshold (e.g., -0.5 to +0.5 degrees C)
+  - Warming risk: SSTA above +0.5 (El Nino signal)
+  - Cooling risk: SSTA below -0.5 (La Nina signal)
+
 ### Prerequisites
 
 - Python 3.10+
@@ -90,25 +98,6 @@ The dataset contains spatial-temporal oceanographic and atmospheric measurements
 git clone <repository-url>
 cd climate-risk-modeling
 pip install -r requirements.txt
-```
-
-### Running the Pipeline
-
-```bash
-# 1. Download and load raw data
-python src/ingestion.py
-
-# 2. Clean, impute, and split
-python src/preprocessing.py
-
-# 3. Engineer time-series features
-python src/features.py
-
-# 4. Train and tune models
-python src/train.py
-
-# 5. Evaluate and generate SHAP plots
-python src/evaluate.py
 ```
 
 ## Tech Stack
