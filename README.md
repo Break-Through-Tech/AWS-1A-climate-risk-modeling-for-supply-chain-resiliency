@@ -49,26 +49,11 @@ The dataset contains spatial-temporal oceanographic and atmospheric measurements
 
 ## Timeline
 
-### September: Scoping and Environment Setup
-
-Deconstruct the business problem, initialize the coding environment, and build the structural blueprint.
-
-**Deliverable:** Technical scoping document mapping individual team roles, task distributions, and initial data loading confirmations.
-
-### October: Data Engineering and Initial Modeling
-
-Clean the raw dataset, engineer robust predictive features, and begin training/tuning ML architectures.
-
-**Deliverable:** Reproducible, modular preprocessing script that outputs cleaned, scaled, and split train/validation sets.
-
-### November: Model Finalization and Presentation
-
-Continue tuning and evaluating models, finalize the codebase to professional open-source standards, and present the solution.
-
-**Deliverables:**
-- Serialized model weights/artifacts with a validation leaderboard detailing performance
-- Clean, production-grade GitHub repository
-- Live final presentation delivered to corporate leadership
+| Month | Milestone | Key Activities |
+|-------|-----------|----------------|
+| September | Technical scoping document | Deconstruct the business problem, initialize coding environments, define team roles and task distributions, confirm initial data loading |
+| October | Modular preprocessing script | Clean the raw dataset, engineer time-series features, implement programmatic imputation, produce reproducible train/validation/test splits |
+| November | Final model, repository, and presentation | Train and tune models, serialize model artifacts, generate SHAP plots and a validation leaderboard, finalize a production-grade GitHub repo, deliver a live presentation to leadership |
 
 ## Repository Structure
 
