@@ -1,121 +1,143 @@
-# AI Studio Challenge Project Title
+# Climate Risk Modeling for Supply Chain Resiliency
 
-> 💡 **Note for the team:** This is just a template. Update the above title with your AI Studio Challenge Project name. Remove all guidance notes and example text in this template and populate this README with your own content. You can work on this README throughout AI Studio, and get feedback from your AI Studio Coach and Challenge Advisor before finalizing it.  
+Predicting Sea Surface Temperature Anomalies (SSTAs) and classifying climate risk thresholds months in advance using spatial-temporal oceanographic data and gradient boosted machine learning architectures.
 
----
+## Business Problem
 
-### 👥 **Team Members**
+Global climate events, particularly the El Nino-Southern Oscillation (ENSO), cause severe supply chain disruptions, logistics delays, and infrastructure vulnerabilities. This project builds a predictive risk model that forecasts SSTAs and classifies climate risk levels, giving organizational stakeholders early warning to mitigate downstream impacts.
 
-**Example:**
+## Dataset
 
-| Name             | GitHub Handle | Contribution                                                             |
-|------------------|---------------|--------------------------------------------------------------------------|
-| Taylor Nguyen    | @taylornguyen | Data exploration, visualization, overall project coordination            |
-| Jordan Ramirez   | @jramirez     | Data collection, exploratory data analysis (EDA), dataset documentation  |
-| Amina Hassan     | @aminahassan  | Data preprocessing, feature engineering, data validation                 |
-| Priya Mehta      | @pmehta       | Model selection, hyperparameter tuning, model training and optimization  |
-| Chris Park       | @chrispark    | Model evaluation, performance analysis, results interpretation           |
+**UCI Machine Learning Repository: El Nino Dataset (ID: 122)**
+https://archive.ics.uci.edu/dataset/122/el+nino
 
----
+The dataset contains spatial-temporal oceanographic and atmospheric measurements from buoy sensors, including sea surface temperatures, air temperatures, wind vectors, humidity, and subsurface readings across the tropical Pacific.
 
-## 🎯 **Project Highlights**
+### Data Dictionary
 
-**Example:**
+| Feature | Description | Unit |
+|---------|-------------|------|
+| `latitude` | Buoy latitude position | Degrees |
+| `longitude` | Buoy longitude position | Degrees |
+| `year` | Observation year | YYYY |
+| `month` | Observation month | 1-12 |
+| `day` | Observation day | 1-31 |
+| `date` | Full observation date | Date |
+| `ss_temp` | Sea surface temperature | Celsius |
+| `air_temp` | Air temperature | Celsius |
+| `humidity` | Relative humidity | Percent |
+| `zonal_wind` | East-west wind component (u-wind) | m/s |
+| `meridional_wind` | North-south wind component (v-wind) | m/s |
+| `subsurface_temp` | Subsurface ocean temperature | Celsius |
 
-- Developed a machine learning model using `[model type/technique]` to address `[challenge project task]`.
-- Achieved `[key metric or result]`, demonstrating `[value or impact]` for `[host company]`.
-- Generated actionable insights to inform business decisions at `[host company or stakeholders]`.
-- Implemented `[specific methodology]` to address industry constraints or expectations.
+*Note: Some features may contain missing values due to sensor malfunctions. Programmatic imputation is part of the pipeline.*
 
----
+## Project Goals
 
-## 👩🏽‍💻 **Setup and Installation**
+**Primary:** Build a classification model using Gradient Boosted Trees and time-series feature engineering that significantly outperforms a naive baseline at predicting climate risk thresholds (extreme warming/cooling spikes vs. normal states), evaluated on Macro F1-Score.
 
-**Provide step-by-step instructions so someone else can run your code and reproduce your results. Depending on your setup, include:**
+**Stretch:** Explore temporal LSTMs (PyTorch) for sequence modeling, or wrap the trained model into a minimal interactive dashboard (Streamlit or Gradio) for real-time risk scoring demonstrations.
 
-* How to clone the repository
-* How to install dependencies
-* How to set up the environment
-* How to access the dataset(s)
-* How to run the notebook or scripts
+## Evaluation Metrics
 
----
+| Criterion | What We Measure |
+|-----------|-----------------|
+| Pipeline Completeness | Modular ingestion of raw UCI data, programmatic imputation of sensor logs, and reproducible train/validation/test splits |
+| Predictive Performance | Macro F1-Score that significantly outperforms a naive baseline, capturing rare high-impact anomalies |
+| Model Interpretability | Feature importance or SHAP value plots explaining which variables drive risk flags for business audiences |
+| Professional Handoff | Clean repository, well-commented code, data dictionary, and a final presentation translating findings into business insights |
 
-## 🏗️ **Project Overview**
+## Timeline
 
-**Describe:**
+### September: Scoping and Environment Setup
 
-- How this project is connected to the Break Through Tech AI Program
-- Your AI Studio host company and the project objective and scope
-- The real-world significance of the problem and the potential impact of your work
+Deconstruct the business problem, initialize the coding environment, and build the structural blueprint.
 
----
+**Deliverable:** Technical scoping document mapping individual team roles, task distributions, and initial data loading confirmations.
 
-## 📊 **Data Exploration**
+### October: Data Engineering and Initial Modeling
 
-**You might consider describing the following (as applicable):**
+Clean the raw dataset, engineer robust predictive features, and begin training/tuning ML architectures.
 
-* The dataset(s) used: origin, format, size, type of data
-* Data exploration and preprocessing approaches
-* Insights from your Exploratory Data Analysis (EDA)
-* Challenges and assumptions when working with the dataset(s)
+**Deliverable:** Reproducible, modular preprocessing script that outputs cleaned, scaled, and split train/validation sets.
 
-**Potential visualizations to include:**
+### November: Model Finalization and Presentation
 
-* Plots, charts, heatmaps, feature visualizations, sample dataset images
+Continue tuning and evaluating models, finalize the codebase to professional open-source standards, and present the solution.
 
----
+**Deliverables:**
+- Serialized model weights/artifacts with a validation leaderboard detailing performance
+- Clean, production-grade GitHub repository
+- Live final presentation delivered to corporate leadership
 
-## 🧠 **Model Development**
+## Repository Structure
 
-**You might consider describing the following (as applicable):**
+```
+.
+├── README.md
+├── data/
+│   ├── raw/              # Original UCI dataset files
+│   └── processed/        # Cleaned, feature-engineered outputs
+├── notebooks/            # Exploratory analysis and prototyping
+├── src/
+│   ├── ingestion.py      # Data loading from UCI repository
+│   ├── preprocessing.py  # Cleaning, imputation, scaling
+│   ├── features.py       # Time-series feature engineering
+│   ├── train.py          # Model training and hyperparameter tuning
+│   ├── evaluate.py       # Metrics, SHAP plots, leaderboard generation
+│   └── predict.py        # Inference on new observations
+├── models/               # Serialized model artifacts
+├── reports/              # Figures, SHAP plots, presentation materials
+├── requirements.txt
+└── .gitignore
+```
 
-* Model(s) used (e.g., CNN with transfer learning, regression models)
-* Feature selection and Hyperparameter tuning strategies
-* Training setup (e.g., % of data for training/validation, evaluation metric, baseline performance)
+## Getting Started
 
+### Prerequisites
 
----
+- Python 3.10+
+- pip or conda
 
-## 📈 **Results & Key Findings**
+### Installation
 
-**You might consider describing the following (as applicable):**
+```bash
+git clone <repository-url>
+cd climate-risk-modeling
+pip install -r requirements.txt
+```
 
-* Performance metrics (e.g., Accuracy, F1 score, RMSE)
-* How your model performed
-* Insights from evaluating model fairness
+### Running the Pipeline
 
-**Potential visualizations to include:**
+```bash
+# 1. Download and load raw data
+python src/ingestion.py
 
-* Confusion matrix, precision-recall curve, feature importance plot, prediction distribution, outputs from fairness or explainability tools
+# 2. Clean, impute, and split
+python src/preprocessing.py
 
----
+# 3. Engineer time-series features
+python src/features.py
 
-## 🚀 **Next Steps**
+# 4. Train and tune models
+python src/train.py
 
-**You might consider addressing the following (as applicable):**
+# 5. Evaluate and generate SHAP plots
+python src/evaluate.py
+```
 
-* What are some of the limitations of your model?
-* What would you do differently with more time/resources?
-* What additional datasets or techniques would you explore?
+## Tech Stack
 
----
+- **Data processing:** pandas, NumPy, scikit-learn
+- **Modeling:** XGBoost or LightGBM (Gradient Boosted Trees)
+- **Interpretability:** SHAP
+- **Stretch (deep learning):** PyTorch (LSTM)
+- **Stretch (dashboard):** Streamlit or Gradio
 
-## 📝 **License**
+## Team
 
-Specify how your project can be used by others. Choose an appropriate license and link it here (e.g., MIT, Apache 2.0). Make sure your Challenge Advisor approves of the selected license type. 
+*Roles and assignments to be defined in the September scoping document.*
 
-**Example:**
-This project is licensed under the MIT License.
+## License
 
----
-
-## 📄 **References** (Optional but encouraged)
-
-Cite relevant papers, articles, or resources that supported your project.
-
----
-
-## 🙏 **Acknowledgements** (Optional but encouraged)
-
-Thank your Challenge Advisor, host company representatives, TA, and others who supported your project.
+TBD
