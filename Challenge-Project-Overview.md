@@ -1,43 +1,3 @@
----
-
-> ## Challenge Advisor: Update & Finalize Your Project Overview
->
-> > 💡 **These grey text instructions are just for you, the team's Challenge Advisor; please delete them once you have completed the steps below.**
->
-> We've pre-populated this Challenge Project Overview page — which is what will be shared with your Break Through Tech student team in August — using the details from your submission form. You should have received an email inviting you to join this repo as a Collaborator, enabling you to add files and make edits.
-> 
-> In order for your project to be finalized and assigned to a team, please:
-> 1. **Review all sections below** and update or expand any content as needed, making sure to address the SME Feedback in the section immediately below. Look for square brackets to find the places below that require additional inputs from you (e.g., "About [Company / Org Name]").
-> 2. **Add your dataset** to the [data folder](data) in this repo.
-> 3. **Close the Issue assigned to you in this repo** to let us know that you have made your edits and the overview page is ready for final review. You can do this by going to the _Issues_ tab in the top left section of the menu above, add a comment that says "CA review complete", and click the button to Close the Issue. 
->
-> If you're unfamiliar with how to edit a page like this in GitHub, check out [this tutorial](https://ubc-lib-geo.github.io/gis-workshop-waml-template/content/handson/edit-readme.html) for a quick overview (start with step 2 and only edit this page), and [this guide](https://ubc-lib-geo.github.io/gis-workshop-waml-template/content/markdown.html) on how to use Markdown to compose text.
->
->
-> ❌ Remember that this is a public repo. Do NOT include: Proprietary data, PII, API keys, credentials, or anything confidential.
-
----
-
-## 📋 BTT Internal Evaluation Notes
-*(This section is for BTT staff only — remove before sharing with students)*
-
-| Check | Status | Notes |
-|-------|--------|-------|
-| Python Compatibility | 🟢 | The tech stack is Python-centered, including PyTorch and Streamlit for model building and user interfaces, respectively. |
-| Data Readiness | 🟢 | Data is sourced from a UCI repository and estimated to be under 1GB, indicating that it's likely ready for immediate use with minimal cleaning required. |
-| Resource Check | 🟢 | The project employs free-tier tools such as Google Colab, making hardware requirements accessible to students without specialized privileges. |
-
-**Student Fit Score:** 8/10  
-**Technical Depth Score:** 7/10  
-**Overall Recommendation:** REVISE
-
-**Advisor Feedback Draft:**
-This project presents a solid opportunity to engage students in a high-impact, real-world application of ML techniques within climate science. However, students may need guidance on best practices for time-series analysis and model evaluation metrics to ensure they derive actionable insights from the model. It would benefit from a clearer definition of the deliverable components to guide student efforts more effectively. Please clarify the scope of the technical scoping document and the criteria for 'professional handoff.'
-
----
-
----
-
 # Climate Risk Modeling for Supply Chain Resiliency
 
 **Company / Org:** Amazon Web Services  
@@ -77,9 +37,9 @@ Use these milestones to guide your work. Your team will create a **GitHub Projec
 
 | Month | Milestone | Key Activities |
 |-------|-----------|----------------|
-| **September** | [Title] | Deconstruct the business problem, initialize the coding environment, and build the structural blueprint. Deliverable: A technical scoping document mapping out individual team roles, task distributions, and initial data loading confirmations. |
-| **October** | [Title] | Clean the raw dataset and engineer robust predictive features. Begin to train, tune, and evaluate machine learning architectures to predict and classify risk. Deliverable: A reproducible, modular preprocessing script that outputs cleaned, scaled, and split train/validation sets. |
-| **November** | [Title] | Continue to train, tune, and evaluate machine learning architectures to predict and classify risk and finalize the codebase to professional open-source standards and present the solution. Deliverable: Serialized model weights/artifacts accompanied by a validation leaderboard detailing model performance. Also a clean, production-grade GitHub repository and a live final presentation delivered to the corporate leadership team. |
+| **September** | Foundation & Scoping | Deconstruct the business problem, initialize the coding environment, and build the structural blueprint. Deliverable: A technical scoping document mapping out individual team roles, task distributions, and initial data loading confirmations. |
+| **October** | Feature Engineering & Baseline Models | Clean the raw dataset and engineer robust predictive features. Begin to train, tune, and evaluate machine learning architectures to predict and classify risk. Deliverable: A reproducible, modular preprocessing script that outputs cleaned, scaled, and split train/validation sets. |
+| **November** | Model Refinement & Handoff | Continue to train, tune, and evaluate machine learning architectures to predict and classify risk and finalize the codebase to professional open-source standards and present the solution. Deliverable: Serialized model weights/artifacts accompanied by a validation leaderboard detailing model performance. Also a clean, production-grade GitHub repository and a live final presentation delivered to the corporate leadership team. |
 
 > **Note for the team:** Please create a GitHub Projects board in this repository to break these milestones into weekly tasks. Go to the **Projects** tab → **New project** → Choose **Board** → Add columns for each month.
 
@@ -93,9 +53,19 @@ Use these milestones to guide your work. Your team will create a **GitHub Projec
 **Location:** [https://archive.ics.uci.edu/dataset/122/el+nino](https://archive.ics.uci.edu/dataset/122/el+nino)
 
 ### Key Details
-- Spatial-temporal oceanographic and atmospheric tabular data (Numerical, Categorical, Time Series) sourced from the UCI El Niño repository.
-- Minimal preprocessing is needed as the data is well-structured.
-- [Link to data dictionary or documentation, if available]
+
+- **Size and coverage.** 178,080 observations from the TAO/TRITON moored buoy array in the tropical Pacific, spanning **7 March 1980 to 23 June 1998**. The record ends in 1998.
+- **Columns.** Observation ID, date fields, latitude, longitude, zonal winds, meridional winds, humidity, air temperature, and sea surface temperature.
+- **The target needs to be derived.** The file contains **raw sea surface temperature in degrees C**, not anomalies. El Niño and La Niña are defined by departures from a long-term average for a given location and calendar month, so building a climatological baseline is part of the work.
+- **Missing values are substantial and are not random.** Humidity is absent from about 37% of rows, both wind components from about 14%, air temperature from 10%, and sea surface temperature from about 10%. Humidity is missing from **100% of records before 1989** because those sensors were added to the array later, dropping to roughly 15% by the mid-1990s. Imputing with a global mean will fill 1980s rows with 1990s sensor values, so plot missingness over time before deciding how to handle it.
+- **Buoy positions drift.** Moorings are nominally fixed but move within a watch circle, so the file contains **8,536 distinct coordinate pairs across roughly 219 mooring locations**. Grouping on raw latitude and longitude will produce thousands of spurious groups. Bin to nominal sites first.
+- **Year is stored as a two-digit offset** (`80` through `98`). Convert to a four-digit year before any date arithmetic.
+
+> ⚠️ **Do not use a random train/test split on this data.**
+>
+> These observations are a time series, and consecutive readings are highly correlated. A random split puts future observations in your training set and past observations in your test set, which lets the model see information it would never have at prediction time. The result is an excellent score and a worthless model.
+>
+> **Split by time instead.** Train on earlier years, validate and test on later ones, or use `TimeSeriesSplit` for cross-validation. `train_test_split(..., shuffle=True)` is the default in most tutorials and it is wrong here.
 
 ---
 
@@ -104,10 +74,15 @@ Use these milestones to guide your work. Your team will create a **GitHub Projec
 **ML Problem Type:** Classification, Regression, Time Series Analysis
 
 **Recommended Libraries:**
-- [e.g., pandas, scikit-learn, TensorFlow, Hugging Face]
+- pandas, numpy, scikit-learn, xgboost or lightgbm, shap, matplotlib, seaborn, PyTorch
 
 **Evaluation Metrics:**
-- [e.g., Accuracy, Precision/Recall, RMSE, BLEU score]
+- **Macro F1** is the headline metric. It weights each risk class equally, so the model has to actually detect rare warming and cooling events rather than scoring well by predicting "normal" most of the time.
+- **Per-class precision and recall**, reported separately for every risk class. A single averaged number hides a model that is excellent on the majority class and useless on the extremes.
+- **Confusion matrix**, so you can see which classes get mistaken for which.
+- **A naive baseline for comparison.** Always report a majority-class or persistence baseline alongside your model. If your classifier does not clearly beat it, the score is not meaningful.
+
+Note that plain accuracy is not a useful headline here. Extreme anomalies are rare by definition, so a model that never predicts them can still post high accuracy while missing every event the project exists to catch.
 
 ---
 
@@ -116,19 +91,23 @@ Use these milestones to guide your work. Your team will create a **GitHub Projec
 The following resources will help your team understand the problem space and potential technical approaches for this project:
 
 **Background Reading:**
-- [e.g., Link to an article or blog post about the problem domain]
-- [e.g., Link to an industry report or case study]
+- [UCI El Niño dataset page](https://archive.ics.uci.edu/dataset/122/el+nino) — the source of your data, with the variable list and collection notes.
+- [Climate Variability: Oceanic Niño Index](https://www.climate.gov/news-features/understanding-climate/climate-variability-oceanic-nino-index) (NOAA Climate.gov) — how El Niño and La Niña are actually defined, and why the definition uses *anomalies* rather than raw temperature. Read this first.
+- [Global Tropical Moored Buoy Array: TAO/TRITON](https://www.pmel.noaa.gov/gtmba/taotriton-collaboration) (NOAA PMEL) — the buoy network that produced these measurements.
+- [What the buoys measure](https://www.pmel.noaa.gov/gtmba/sampling) (NOAA PMEL) — instrument details, useful for understanding why some readings are missing.
 
 **Technical Tutorials:**
-- [e.g., Link to a free tutorial on the ML technique(s) involved]
-- [e.g., Link to documentation for a key library or tool]
+- [Cross-validation for time series](https://scikit-learn.org/stable/modules/cross_validation.html) (scikit-learn) — see the `TimeSeriesSplit` section. Essential before you split this dataset.
+- [`TimeSeriesSplit` reference](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.TimeSeriesSplit.html) (scikit-learn).
+- [SHAP documentation](https://shap.readthedocs.io/en/latest/) — for the model interpretability deliverable. Start with the tabular and tree-model examples.
+- [`classification_report`](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.classification_report.html) (scikit-learn) — gives per-class precision, recall, and F1 in one call.
 
 **Code Examples:**
-- [e.g., Link to a relevant GitHub repo]
-- [e.g., Link to a sample implementation or starter code]
+- [LightGBM documentation](https://lightgbm.readthedocs.io/en/stable/) — gradient boosted trees, a strong default for tabular problems like this one.
+- [Oceanic Niño Index table](https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/ensostuff/ONI_v5.php) (NOAA CPC) — official ONI values by season. Useful if you want an external reference for labeling risk periods.
 
 **Other:**
-- [Links to any additional resources — e.g., papers, videos, podcasts, etc.]
+- Ask your AI Studio Coach for a walkthrough of any of these. The ENSO background reading and the time-series cross-validation tutorial are the two worth doing before you write modeling code.
 
 *Feel free to explore beyond these, and share anything interesting you find with me!*
 
@@ -138,18 +117,9 @@ The following resources will help your team understand the problem space and pot
 
 **Official check-ins:** During our biweekly 45-minute AI Studio Lab Section meeting block (2nd and 4th week of every month)
 
- **Other ways to reach out to me with questions:** 
-* [e.g., Your team's channel within Break Through Tech’s Discord space]
-* [e.g., Email; please copy your teammates and AI Studio Coach]
-* [e.g., Request a team check-in on Zoom]
-* [Note: I will aim to respond within 48 hours. Please reach out to your AI Studio Coach with urgent questions.]
-
-> 💡 **Challenge Advisor: Please update the above based on your availability and preference. If you are not able to answer questions or meet with fellows outside of the biweekly Lab Section check-ins, simply write in "N/A (only available during the official check-in times)"**
-
 **Recommended free coding / collaboration tools**
-* […]
-* […]
-
+* [Google Colab](https://colab.research.google.com/)
+* GitHub (you are here)
 ---
 
 ## 🚀 Getting Started
