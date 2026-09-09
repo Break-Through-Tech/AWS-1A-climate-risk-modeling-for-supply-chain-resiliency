@@ -114,6 +114,11 @@ pip install -r requirements.txt
 
 *Roles and assignments to be defined in the September scoping document.*
 
+Dharaa LNU
+Daniel Olusheki
+Karina Villaloos Hernandez
+Jennifer Yamashita
+
 ## License
 
 TBD
