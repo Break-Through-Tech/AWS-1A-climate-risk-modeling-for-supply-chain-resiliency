@@ -111,7 +111,10 @@ pip install -r requirements.txt
 
 ## Team
 
-*Roles and assignments to be defined in the September scoping document.*
+Abiral Shrestha
+Daniel Olusheki 
+Dharaa LNU 
+
 
 ## License
 
