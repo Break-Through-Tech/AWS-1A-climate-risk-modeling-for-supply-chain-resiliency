@@ -103,6 +103,7 @@ pip install -r requirements.txt
 
 ## Tech Stack
 
+- **IDE:** VS Code
 - **Data processing:** pandas, NumPy, scikit-learn
 - **Modeling:** XGBoost or LightGBM (Gradient Boosted Trees)
 - **Interpretability:** SHAP
