@@ -58,6 +58,31 @@ def find_file(dir, filename):
                 return os.path.join(root, file)
     return None
 
+
+def verify_csv(csv_path, expected_columns):
+    """Verify a processed CSV's columns, missing values, and data types."""
+    df = pd.read_csv(csv_path)
+    dataset_name = os.path.basename(csv_path)
+
+    if len(df.columns) != expected_columns:
+        print(
+            f"[ERROR] {dataset_name}: expected {expected_columns} columns, "
+            f"but found {len(df.columns)}."
+        )
+        return False
+
+    print(f"[OK] {dataset_name}: column count matches expected ({expected_columns}).")
+    print(f"[INFO] {dataset_name}: found {df.isna().sum().sum()} missing values.")
+
+    non_numeric_columns = df.select_dtypes(include=["object"]).columns.tolist()
+    if non_numeric_columns:
+        print(f"[WARNING] {dataset_name}: non-numeric columns: {non_numeric_columns}")
+    else:
+        print(f"[OK] {dataset_name}: all columns parsed as numeric types.")
+
+    return True
+
+
 def process_dataset(raw_dir, processed_dir, dataset_prefix, expected_columns):
     """
     Process a dataset (.gz) using the column definition (.col) and verify it against the expected columns.
@@ -85,12 +110,6 @@ def process_dataset(raw_dir, processed_dir, dataset_prefix, expected_columns):
     raw_columns = read_column_names(col_file)
     columns = normalize_column_names(raw_columns)
 
-    # Each dataset has a different schema, so verify its expected column count.
-    if len(columns) != expected_columns:
-        print(f"[ERROR] Expected {expected_columns} columns, but found {len(columns)}.")
-        return
-    print(f"[OK] Column count matches expected ({expected_columns}).")
-
     # Read the .gz file into a DataFrame
     df = pd.read_csv(
         gz_file,
@@ -101,16 +120,11 @@ def process_dataset(raw_dir, processed_dir, dataset_prefix, expected_columns):
         na_values=["."],
     )
 
-    if len(df.columns) != expected_columns:
-        print(f"[ERROR] Parsed data has {len(df.columns)} columns; expected {expected_columns}.")
-        return
-
-    print(f"[INFO] Found {df.isna().sum().sum()} missing values.")
-
     # Save the processed DataFrame to the processed directory
     processed_file_path = os.path.join(processed_dir, f"{dataset_prefix}.csv")
     df.to_csv(processed_file_path, index=False)
     print(f"[OK] Saved {processed_file_path} with {len(df)} rows.")
+    verify_csv(processed_file_path, expected_columns)
 
 
 def main():
