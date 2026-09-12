@@ -1,0 +1,2 @@
+The goal of this folder is to record design choices throughout your project, or having extended descriptions of the functionality of our project / tasks.
+This should ultimately help other team members gain insight to what other people are working on and can be a record for understanding the project.

@@ -116,6 +116,10 @@ pip install -r requirements.txt
 Abiral Shrestha
 Sdhari Hardy
 Jasmine McCray
+Dharaa LNU
+Daniel Olusheki
+Karina Villaloos Hernandez
+Jennifer Yamashita
 
 ## License
 
