@@ -15,20 +15,27 @@ The dataset contains spatial-temporal oceanographic and atmospheric measurements
 
 ### Data Dictionary
 
-| Feature | Description | Unit |
-|---------|-------------|------|
-| `latitude` | Buoy latitude position | Degrees |
-| `longitude` | Buoy longitude position | Degrees |
-| `year` | Observation year | YYYY |
-| `month` | Observation month | 1-12 |
-| `day` | Observation day | 1-31 |
-| `date` | Full observation date | Date |
-| `ss_temp` | Sea surface temperature | Celsius |
-| `air_temp` | Air temperature | Celsius |
-| `humidity` | Relative humidity | Percent |
-| `zonal_wind` | East-west wind component (u-wind) | m/s |
-| `meridional_wind` | North-south wind component (v-wind) | m/s |
-| `subsurface_temp` | Subsurface ocean temperature | Celsius |
+| Feature | Description | Unit | Dataset availability |
+|---------|-------------|------|---------------------|
+| `buoy` | Buoy identifier | Identifier | `elnino` |
+| `obs` | Observation identifier | Identifier | `tao-all2` |
+| `latitude` | Buoy latitude position | Degrees | Both |
+| `longitude` | Buoy longitude position | Degrees | Both |
+| `year` | Observation year | YYYY | `tao-all2` |
+| `month` | Observation month | 1-12 | `tao-all2` |
+| `day` | Observation day | 1-31 | Both |
+| `date` | Full observation date | Date | `tao-all2` |
+| `ss_temp` | Sea surface temperature | Celsius | Both |
+| `air_temp` | Air temperature | Celsius | Both |
+| `humidity` | Relative humidity | Percent | Both |
+| `zonal_wind` | East-west wind component (u-wind) | m/s | Both |
+| `meridional_wind` | North-south wind component (v-wind) | m/s | Both |
+
+The raw UCI files use names such as `zon.winds`, `air temp.`, and `s.s.temp.`.
+The ingestion script normalizes these to the canonical names shown above. The
+smaller `elnino` dataset is a subset of the `tao-all2` schema: it does not
+contain `obs`, `year`, `month`, or `date`. Neither file includes a
+`subsurface_temp` column, so that feature is not currently available.
 
 *Note: Some features may contain missing values due to sensor malfunctions. Programmatic imputation is part of the pipeline.*
 
@@ -96,8 +103,15 @@ The dataset doesn't come with a pre-labeled target variable. The target would be
 ### Installation
 
 ```bash
+# Clone and enter project directory
 git clone <repository-url>
 cd climate-risk-modeling
+
+# Create and activate virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Install dependencies
 pip install -r requirements.txt
 ```
 
