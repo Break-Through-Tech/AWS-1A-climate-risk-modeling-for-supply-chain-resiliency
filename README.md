@@ -132,6 +132,9 @@ Dharaa LNU
 Daniel Olusheki
 Karina Villaloos Hernandez
 Jennifer Yamashita
+Abiral Shrestha
+Sdhari Hardy
+Jasmine McCray
 
 ## License
 
