@@ -107,17 +107,28 @@ The raw data contains water temperature in degrees Celsius (`ss_temp`). However,
 * **Option C: Calculate site-specific monthly climatological baselines.**
   * *Selected:* Compute the historical average temperature for each physical mooring station in each calendar month:
     ```
-    monthly_clim = average ss_temp for [site_id, calendar_month] across historical baseline
+    monthly_clim = average ss_temp for [site_id, calendar_month] across the TRAINING years only
     sst_anomaly = ss_temp - monthly_clim
     ```
 
+### Preventing Data Leakage in the Baseline
+The baseline is computed from **training data only** (`tao-all2`: 1980–1993; `elnino`: days 1–9) and then looked up for every row in train, validation, and test. This follows the same "frozen parameter" rule as the scaler in Stage 5.
+
+* *Why:* An earlier version averaged all years, including the 1997–98 test period. A 1997 reading was then compared against a "normal" that already contained 1997, which pulled the baseline toward the test data and shrank the very anomalies the model is meant to detect.
+* *Implementation:* `groupby(['site_id', 'month'])` on training rows only, then `join` the result back onto all rows. Split boundaries are defined once as constants (`TRAIN_END_YEAR`, `VAL_END_YEAR`, `ELNINO_TRAIN_END_DAY`, `ELNINO_VAL_END_DAY`) in the notebook's first cell, so the baseline and the split always agree.
+
+### Rows Without a Baseline
+Site/month pairs never observed in training (mostly stations deployed after 1993) have no baseline. Their `monthly_clim`, `sst_anomaly`, and `risk_class` are left as `NaN` instead of being labeled Neutral: **13,362 `tao-all2` rows** (0 train, 8,567 validation, 4,795 test). `elnino` has none. Filter them with `df.dropna(subset=['risk_class'])` when needed. `feature_engineering.ipynb` reports the same count, so both notebooks use the same baseline.
+
 ### Risk Classification Thresholds
-To satisfy the project requirement of predicting rare, high-impact climate anomalies evaluated via Macro F1-score, we mapped continuous anomalies into standard NOAA Oceanic Niño Index (ONI) tiers:
-* **Extreme Warm (Strong El Niño Risk):** anomaly >= +1.5°C (5.6% of data)
-* **Moderate Warm (El Niño Alert):** +0.5°C <= anomaly < +1.5°C (17.2% of data)
-* **Neutral (Normal Baseline):** -0.5°C < anomaly < +0.5°C (52.6% of data)
-* **Moderate Cool (La Niña Alert):** -1.5°C < anomaly <= -0.5°C (19.4% of data)
-* **Extreme Cool (Strong La Niña Risk):** anomaly <= -1.5°C (5.3% of data)
+To satisfy the project requirement of predicting rare, high-impact climate anomalies evaluated via Macro F1-score, we mapped continuous anomalies into standard NOAA Oceanic Niño Index (ONI) tiers. Percentages are for `tao-all2` rows with a baseline, using the training-only climatology:
+* **Extreme Warm (Strong El Niño Risk):** anomaly >= +1.5°C (6.0% of data)
+* **Moderate Warm (El Niño Alert):** +0.5°C <= anomaly < +1.5°C (18.4% of data)
+* **Neutral (Normal Baseline):** -0.5°C < anomaly < +0.5°C (50.7% of data)
+* **Moderate Cool (La Niña Alert):** -1.5°C < anomaly <= -0.5°C (18.8% of data)
+* **Extreme Cool (Strong La Niña Risk):** anomaly <= -1.5°C (6.1% of data)
+
+Compared with the earlier all-years baseline (52.6% Neutral, 5.6% / 5.3% Extreme Warm / Cool), fewer rows are Neutral and more are extreme, as expected once test-period readings no longer pull their own baseline toward them.
 
 ---
 
