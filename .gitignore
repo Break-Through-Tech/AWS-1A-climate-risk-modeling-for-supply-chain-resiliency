@@ -7,3 +7,4 @@ data/
 .codex
 # Jupyter autosave backups
 .ipynb_checkpoints/
+.vscode/
