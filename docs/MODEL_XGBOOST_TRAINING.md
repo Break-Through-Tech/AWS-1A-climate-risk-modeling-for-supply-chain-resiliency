@@ -126,3 +126,41 @@ pred_delta = model.predict(features)
 forecasted_ssta = df["ssta"] + pred_delta
 forecasted_tier = forecasted_ssta.map(classify_calibrated)
 ```
+
+---
+
+## 7. Model Improvement & Fine-Tuning Roadmap (Next Steps)
+
+Based on climate AI literature and empirical findings from our validation diagnostics, here is a prioritized roadmap of candidate improvements:
+
+### 1. Custom Asymmetric / LinEx Loss Function
+* **The Concept:** Standard MSE squares errors equally in both directions: $(\widehat{\Delta} - \Delta)^2$. However, under-predicting an impending extreme cooling or warming spike has a much higher supply chain penalty than slight over-prediction.
+* **Implementation:** Write a custom objective function for XGBoost (using its custom `grad` and `hess` interface) implementing a **LinEx (Linear-Exponential)** or **Asymmetric Quadratic Loss** that penalizes under-estimating the magnitude of extreme anomalies $3\times$ to $5\times$ more severely than over-estimating them.
+
+### 2. Damped Persistence Anchor ($\alpha \cdot \text{ssta} + \Delta$)
+* **The Concept:** Currently, our residual equation uses pure persistence: $\widehat{Y} = 1.0 \cdot \text{ssta} + \widehat{\Delta}$.
+* **Implementation:** In tropical oceanography, ocean anomalies naturally decay / damp over time due to atmospheric heat exchange. Finding the optimal damping coefficient $\alpha \in [0.70, 0.95]$ via:
+  $$\widehat{\text{future\_ssta}} = \alpha \cdot \text{ssta}_{\text{today}} + \widehat{\Delta}$$
+  relieves the tree booster from having to compensate for natural thermal decay.
+
+### 3. Two-Stage "Hurdle" Architecture
+* **The Concept:** Decouple event detection from intensity estimation.
+  - **Stage 1 (Binary Gate):** XGBoost classifier trained to predict `Is_Active_ENSO` (i.e. $|\text{target\_ssta}| \ge 0.5^\circ\text{C}$).
+  - **Stage 2 (Severity Regressor):** Trained *only* on non-neutral months to estimate the precise intensity ($\Delta$) of the active event.
+* **Why it helps:** Prevents the thousands of stable Neutral months from suppressing the gradients of developing anomalies.
+
+### 4. Cross-Model Ensemble with Partner's LightGBM
+* **The Concept:** XGBoost uses pre-sorted / histogram depth-wise tree growth, while LightGBM uses leaf-wise (best-first) tree growth. They make subtly different residual errors.
+* **Implementation:** Average the predicted $\Delta$ values from both models:
+  $$\widehat{\Delta}_{\text{ensemble}} = w_{\text{xgb}} \widehat{\Delta}_{\text{xgb}} + (1 - w_{\text{xgb}}) \widehat{\Delta}_{\text{lgbm}}$$
+  Ensembles of different tree growth algorithms consistently gain $0.02–0.04$ Macro F1 over single models in time-series benchmarks.
+
+### 5. Physical Interaction Features (Wind-SST Coupling)
+* **The Concept:** El Niño / La Niña physics are driven by Bjerknes feedback (the non-linear coupling between sea surface temperature and western Pacific winds).
+* **Implementation:** Engineer explicit interaction terms:
+  - `ssta_x_west_pac_wind = ssta * west_pac_zwind_anom` (captures whether prevailing anomalies are amplified by wind bursts).
+  - `thermal_acceleration = ssta_change1 - (ssta_lag1 - ssta_lag2)` (second derivative of temperature, detecting if warming/cooling is accelerating).
+
+### 6. Hyperparameter Optimization with Temporal Cross-Validation
+* **The Concept:** Tune `colsample_bytree`, `subsample`, `reg_alpha` (L1), and `reg_lambda` (L2) using Bayesian Optimization (Optuna).
+* **Validation Strategy:** Use a rolling-origin walk-forward time-series split (with a 6-month buffer gap between training blocks) rather than a single fixed validation cut, ensuring the parameters generalize across different decades and ENSO cycles.
