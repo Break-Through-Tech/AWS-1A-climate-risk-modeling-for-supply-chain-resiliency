@@ -8,3 +8,4 @@ data/
 # Jupyter autosave backups
 .ipynb_checkpoints/
 .vscode/
+models/
