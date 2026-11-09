@@ -5,6 +5,9 @@ data/
 
 # Agent configuration files
 .codex
+.agent/
+AGENTS.md
+
 # Jupyter autosave backups
 .ipynb_checkpoints/
 .vscode/
