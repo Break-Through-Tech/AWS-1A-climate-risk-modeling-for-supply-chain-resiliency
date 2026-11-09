@@ -1,7 +1,5 @@
 # Model Training Decisions & Experiments
 
-Numbers below match the current `notebooks/model_training_regression.ipynb` outputs (absolute LightGBM + feature experiments) and a verified residual/delta rerun with the same `lgbm_params`.
-
 **Current main hyperparameters**
 
 | Setting | Value |
@@ -35,7 +33,7 @@ Multiclass `target_risk` training was collapsing toward Neutral and missing extr
 | Test  | 1.165 | 0.826 | 0.299    |
 
 **Interpretation**  
-Regression is usable and gives a continuous forecast, but Macro F1 on val is still weak. Test F1 looks better mainly because the 1997–98 test mix differs from val—not because the model clearly solved extremes.
+The model can predict a temperature anomaly, but it still struggles to turn that prediction into the right risk tier. Validation Macro F1 is 0.209, below Persistence at 0.353. Test has a different mix of risk classes, so its higher score does not show that the model has solved extreme-event detection.
 
 ---
 
@@ -72,7 +70,7 @@ Score Dummy, Persistence, and binned absolute LightGBM on val and test.
 ## 3. Hyperparameter changes for overfitting
 
 **Hypothesis**  
-Large train/val RMSE gap meant the model was memorizing train. Stronger regularization + slower learning should improve validation generalization.
+The model makes smaller errors on training data than on validation data. Stronger regularization and slower learning were tried to see whether they help on later years.
 
 **Experiment history**  
 An earlier, more aggressive regularized config was tried (`learning_rate=0.02`, `min_child_samples=40`, higher L1/L2, 300 rounds). Val Macro F1 stayed ~flat (~0.22). The notebook now uses the milder regularized set documented at the top of this file (`lr=0.04`, `min_child_samples=25`, etc.).
@@ -84,7 +82,7 @@ An earlier, more aggressive regularized config was tried (`learning_rate=0.02`, 
 | Current notebook params | 0.421 | 0.759 | 0.209 | 0.299 |
 
 **Interpretation**  
-Regularization alone did not close the gap to Persistence. Treat hyperparameter tuning as secondary to target/feature design.
+Changing the regularization did not make this model beat Persistence. The next experiments should focus on what the model predicts and which inputs it uses.
 
 **Conclusion**  
 Keep the current notebook params as the shared default for absolute and delta runs, but do not expect big F1 gains from tuning alone.
@@ -109,14 +107,14 @@ Absolute LightGBM; only feature subsets change. Feature-experiment cells current
 
 | Model / Strategy | Features | Val Macro F1 | Acc | Val RMSE | Beats Persist F1? |
 | --- | --- | --- | --- | --- | --- |
-| Dummy | 0 | 0.133 | 0.495 | — | No |
+| Dummy | 0 | 0.132 | 0.495 | — | No |
 | Persistence | 0 | **0.353** | 0.525 | 0.782 | — |
 | LightGBM Full | 36 | 0.209 | 0.515 | 0.759 | No |
 | LightGBM Trimmed | 23 | 0.226 | 0.520 | 0.739 | No |
 | LightGBM Physical | 16 | **0.233** | 0.517 | **0.738** | No |
 
 **Interpretation**  
-Noise features are not carrying the model; TRIMMED and PHYSICAL both beat FULL slightly on Val F1/RMSE. Gains are still small vs the Persistence Macro F1 gap. No subset recovers Extreme Warm (F1 = 0).
+The trimmed and physical sets do a little better than the full set on validation. The physical set scores 0.233 Macro F1, but Persistence still leads at 0.353. All three feature sets miss every Extreme Warm case in validation. Since several inputs were removed together, this does not tell us the effect of humidity alone.
 
 **Conclusion**  
 Prefer **TRIMMED (23)** or **PHYSICAL (16)** over FULL for absolute runs (simpler, similar or slightly better). Re-check both under the **delta** target next. FULL is optional for completeness checks only.
@@ -137,7 +135,7 @@ Track in parallel:
 Lower Val RMSE did not reliably mean higher Macro F1 vs Persistence. Absolute Test Macro F1 (~0.30) can look fine while Val Macro F1 (~0.21) still fails the Persistence bar.
 
 **Interpretation**  
-Optimizing RMSE alone is insufficient for the risk-class story. Always report both; never pick a model from Test F1 without checking Val vs Persistence.
+Smaller temperature errors do not always mean better risk labels. Check both RMSE and Macro F1, and use validation performance against Persistence to compare models.
 
 **Conclusion**  
 **Primary selection rule:** improve Val Macro F1 vs Persistence, with Val RMSE as a secondary check. Use Test only as a final holdout readout.
@@ -173,13 +171,9 @@ Same LightGBM hyperparameters and full feature matrix as the main absolute model
 | Beats Persistence Val Macro F1? | No | No (closer: 0.296 vs 0.353) |
 | Beats Persistence Test Macro F1? | No | **Yes** (0.374 vs 0.308) |
 
-**Interpretation**  
+**Interpretation**
 
-- Delta clearly beats absolute LightGBM on Val and Test (RMSE and Macro F1).  
-- Prediction range widens; absolute model remains overly cautious.  
-- On **Test**, delta beats Persistence on Macro F1 and accuracy.  
-- On **Val**, delta still trails Persistence Macro F1, but closes much of the gap (0.21 → 0.30).  
-- Extreme Warm on val remains unsolved (only 17 support rows).
+Predicting the change from today's anomaly does better than direct prediction on both validation and test. Validation Macro F1 rises from 0.209 to 0.296, but Persistence still leads at 0.353. On test, the delta model beats Persistence (0.374 vs 0.308). It catches some Extreme Cool cases in validation, but still misses every Extreme Warm case. The delta approach is worth developing further, but it has not yet met the validation bar.
 
 **Conclusion**  
 **Prefer the residual / delta target** over absolute `target_ssta` for LightGBM going forward. Keep absolute training only as a reference baseline.
