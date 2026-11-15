@@ -30,7 +30,7 @@ def main():
     monthly_humidity_mean = df.groupby('month')['humidity'].transform('mean')
     post_1989_humidity = df['year'] >= 1989
     df.loc[post_1989_humidity, 'humidity'] = df.loc[post_1989_humidity, 'humidity'].fillna(monthly_humidity_mean)
-    df['humidity'] = np.where(df['year'] < 1989, 0, df['humidity'])
+    df['humidity'] = np.where(df['year'] < 1989, np.nan, df['humidity'])
 
     #Verify all missing values have been handled
     print(df.isnull().sum())
