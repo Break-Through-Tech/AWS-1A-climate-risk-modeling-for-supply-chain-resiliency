@@ -11,4 +11,5 @@ AGENTS.md
 # Jupyter autosave backups
 .ipynb_checkpoints/
 .vscode/
-models/
+models/*
+!models/.gitkeep
