@@ -13,7 +13,7 @@ export const storyCharts = [
     image: 'monthly-ssta.png',
     title: 'El Niño and La Niña show up clearly in the raw data',
     body: 'Average sea surface temperature anomaly across all buoys, 1980–1998. The spikes are the 1982–83 and 1997–98 El Niños, and the dip in 1988 is La Niña. The break in 1983 is missing data.',
-    decision: 'Confirms our anomaly calculation matches real climate history.',
+    decision: 'Our anomaly calculation reproduces known El Niño and La Niña events.',
     author: AUTHORS.sdhari,
     alt: 'Line chart of the average sea surface temperature anomaly from 1980 to 1998, with large positive spikes in 1982–83 and 1997–98, a sharp dip in 1988, and a gap in 1983.',
   },

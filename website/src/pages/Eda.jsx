@@ -43,7 +43,7 @@ export default function Eda() {
         <p className="kicker">Exploratory data analysis</p>
         <h1>What the data showed us</h1>
         <p className="lead">
-          Five charts from the team’s exploration of 18 years of Pacific buoy data. Each one shaped a decision about the
+          Before training anything, we explored 18 years of Pacific buoy data, and five charts shaped how we built the
           model.
         </p>
       </section>
