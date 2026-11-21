@@ -8,6 +8,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <title>ENSO Risk Explorer</title>
+    <script>
+      // Pick the theme before the page draws, so it never flashes the wrong colors:
+      // the visitor's saved choice, else their system setting, else dark.
+      try {
+        var theme = localStorage.getItem('theme')
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+        }
+        document.documentElement.dataset.theme = theme
+      } catch (e) {
+        document.documentElement.dataset.theme = 'dark'
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

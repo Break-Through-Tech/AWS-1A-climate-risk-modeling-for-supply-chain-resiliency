@@ -1,4 +1,8 @@
-/* Deep ocean theme, matching the "Website – Deep ocean" Figma page. */
+/* Two themes. Every color on the site comes from these variables, so a theme is
+   just a different set of values. The theme is set on <html data-theme="...">
+   by the script in index.html and the toggle in the nav. */
+
+/* Dark: "deep ocean", matching the "Website – Deep ocean" Figma page. */
 :root {
   --bg: #0b1b2b;
   --surface: #13283d;
@@ -8,10 +12,75 @@
   --accent: #2ec4b6;
   --accent-soft: #10344a;
   --on-accent: #0b1b2b;
+  --track: #1c3650;
+
+  --nav-bg: #13283d;
+  --nav-ink: #e8eef4;
+  --nav-muted: #9fb3c8;
+  --nav-active: #2ec4b6;
+  --nav-active-bg: transparent;
+  --nav-line: #24405c;
+
   --footer: #06111c;
+  --footer-ink: #e8eef4;
+  --footer-muted: #9fb3c8;
+  --footer-link: #2ec4b6;
+
+  --map-ocean: #0f2438;
+  --map-grid: #1a3550;
+  --map-equator: #3e5a76;
+  --map-land: #22343f;
+  --map-dot: #5f7a94;
+  --map-nodata: #2a4560;
+
+  --soon-bg: #3a2e14;
+  --soon-fg: #f2c46d;
+  --missed-bg: #3a1e1c;
+  --missed-fg: #f08a6e;
+
   --radius: 10px;
   --gutter: 120px;
   color-scheme: dark;
+}
+
+/* Light: built from the teammate's palette
+   (#0E293E, #064273, #1DA2D8, #7FCDFF, #76B6C4 and the pale blue-gray background). */
+:root[data-theme='light'] {
+  --bg: #e3eff2;
+  --surface: #ffffff;
+  --line: #c3dae1;
+  --ink: #0e293e;
+  --muted: #3f5a6e;
+  --accent: #064273;
+  --accent-soft: #dbeef8;
+  --on-accent: #ffffff;
+  --track: #e3eef2;
+
+  --nav-bg: #0e293e;
+  --nav-ink: #ffffff;
+  --nav-muted: #b9d3df;
+  --nav-active: #0e293e;
+  --nav-active-bg: #dff0f5;
+  --nav-line: rgba(255, 255, 255, 0.28);
+
+  --footer: #0e293e;
+  --footer-ink: #ffffff;
+  --footer-muted: #b9d3df;
+  --footer-link: #7fcdff;
+
+  --map-ocean: #d3e9f1;
+  --map-grid: #b9d7e1;
+  --map-equator: #76b6c4;
+  --map-land: #c9d4d8;
+  --map-dot: #8aa3b3;
+  --map-nodata: #b4c8d1;
+
+  --soon-bg: #fff1d6;
+  --soon-fg: #7a4d00;
+  --missed-bg: #fbe3dd;
+  --missed-fg: #a33320;
+
+  color-scheme: light;
 }
 
 * {
@@ -56,18 +125,21 @@ code {
   z-index: 10;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
+  gap: 16px;
   padding: 18px var(--gutter);
-  background: var(--surface);
-  border-bottom: 1px solid var(--line);
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--nav-line);
+}
+
+.site-nav nav {
+  margin-left: auto;
 }
 
 .brand {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: var(--ink);
+  color: var(--nav-ink);
   font-size: 18px;
   font-weight: 700;
   text-decoration: none;
@@ -84,34 +156,64 @@ code {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 12px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .nav-links a {
+  display: block;
+  padding: 6px 12px;
+  border-radius: 16px;
   white-space: nowrap;
-  color: var(--muted);
+  color: var(--nav-muted);
   font-size: 15px;
   font-weight: 500;
   text-decoration: none;
 }
 
-.nav-links a:hover,
-.nav-links a.active {
-  color: var(--accent);
+.nav-links a:hover {
+  color: var(--nav-ink);
 }
 
 .nav-links a.active {
+  background: var(--nav-active-bg);
+  color: var(--nav-active);
   font-weight: 600;
 }
 
 .nav-links .nav-github {
-  padding: 8px 14px;
-  border: 1px solid var(--line);
+  padding: 7px 14px;
+  border: 1px solid var(--nav-line);
   border-radius: 8px;
-  color: var(--ink);
+  color: var(--nav-ink);
+}
+
+.theme-toggle {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--nav-line);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--nav-ink);
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  background: rgba(127, 205, 255, 0.15);
+}
+
+.theme-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+:focus-visible {
+  outline: 2px solid #1da2d8;
+  outline-offset: 2px;
 }
 
 /* ---------- Shared building blocks ---------- */
@@ -396,16 +498,16 @@ h1 {
 }
 
 .map-ocean {
-  fill: #0f2438;
+  fill: var(--map-ocean);
 }
 
 .map-grid {
-  stroke: #1a3550;
+  stroke: var(--map-grid);
   stroke-width: 1;
 }
 
 .map-equator {
-  stroke: #3e5a76;
+  stroke: var(--map-equator);
   stroke-width: 1.5;
 }
 
@@ -416,7 +518,7 @@ h1 {
 }
 
 .map-land {
-  fill: #22343f;
+  fill: var(--map-land);
 }
 
 .map-buoy {
@@ -500,7 +602,7 @@ h1 {
   display: flex;
   justify-content: space-between;
   border: 1px solid var(--line);
-  background: #1c3650;
+  background: var(--track);
   font-weight: 600;
 }
 
@@ -537,7 +639,7 @@ h1 {
 }
 
 .source-disabled {
-  background: #1c3650;
+  background: var(--track);
   color: var(--muted);
   cursor: not-allowed;
 }
@@ -546,8 +648,8 @@ h1 {
   margin-left: auto;
   padding: 2px 8px;
   border-radius: 8px;
-  background: #3a2e14;
-  color: #f2c46d;
+  background: var(--soon-bg);
+  color: var(--soon-fg);
   font-size: 11px;
   font-weight: 600;
 }
@@ -634,7 +736,7 @@ h1 {
   position: relative;
   height: 12px;
   border-radius: 3px;
-  background: #1c3650;
+  background: var(--track);
 }
 
 .why-bar::after {
@@ -800,8 +902,8 @@ h1 {
 }
 
 .verdict-missed {
-  background: #3a1e1c;
-  color: #f08a6e;
+  background: var(--missed-bg);
+  color: var(--missed-fg);
 }
 
 /* ---------- Footer ---------- */
@@ -811,13 +913,17 @@ h1 {
   gap: 24px;
   padding: 40px var(--gutter);
   background: var(--footer);
-  color: var(--muted);
+  color: var(--footer-muted);
   font-size: 13px;
 }
 
 .site-footer strong {
-  color: var(--ink);
+  color: var(--footer-ink);
   font-size: 16px;
+}
+
+.site-footer a {
+  color: var(--footer-link);
 }
 
 .site-footer p {
@@ -869,17 +975,26 @@ h1 {
     --gutter: 16px;
   }
 
+  /* Phones: logo and theme button on the first row, scrollable links below. */
   .site-nav {
-    flex-direction: column;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: 10px;
     padding-top: 14px;
     padding-bottom: 12px;
   }
 
   .site-nav nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
     max-width: 100%;
+    margin-left: 0;
     overflow-x: auto;
+  }
+
+  .theme-toggle {
+    grid-column: 2;
+    grid-row: 1;
   }
 
   .nav-links {

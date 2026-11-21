@@ -54,7 +54,8 @@ export default function BuoyMap({ buoys, selectedId, onSelect, colorFor, title }
 
       {buoys.map((buoy) => {
         const selected = buoy.id === selectedId
-        const fill = colorFor?.(buoy.id) ?? '#5f7a94'
+        // A style (not the fill attribute) so theme variables like var(--map-dot) work.
+        const fill = colorFor?.(buoy.id) ?? 'var(--map-dot)'
         return (
           <g
             key={buoy.id}
@@ -68,7 +69,7 @@ export default function BuoyMap({ buoys, selectedId, onSelect, colorFor, title }
           >
             <title>{buoy.label}</title>
             {selected && <circle cx={x(buoy.lon)} cy={y(buoy.lat)} r={17} className="map-selected-ring" />}
-            <circle cx={x(buoy.lon)} cy={y(buoy.lat)} r={selected ? 10 : 8} fill={fill} className="map-dot" />
+            <circle cx={x(buoy.lon)} cy={y(buoy.lat)} r={selected ? 10 : 8} style={{ fill }} className="map-dot" />
           </g>
         )
       })}

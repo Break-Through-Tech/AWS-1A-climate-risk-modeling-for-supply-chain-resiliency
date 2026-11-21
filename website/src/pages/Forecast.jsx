@@ -213,7 +213,7 @@ export default function Forecast() {
             buoys={data.buoys}
             selectedId={draft.buoy}
             onSelect={chooseBuoy}
-            colorFor={(id) => (tierAt[id] ? TIER_STYLE[tierAt[id]].bg : '#2a4560')}
+            colorFor={(id) => (tierAt[id] ? TIER_STYLE[tierAt[id]].bg : 'var(--map-nodata)')}
             title="Buoys colored by forecast risk tier"
           />
           <p className="map-caption">

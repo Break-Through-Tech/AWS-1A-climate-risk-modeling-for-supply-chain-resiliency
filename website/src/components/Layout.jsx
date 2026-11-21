@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import ThemeToggle from './ThemeToggle.jsx'
 
 const REPO_URL = 'https://github.com/Break-Through-Tech/AWS-1A-climate-risk-modeling-for-supply-chain-resiliency'
 
@@ -42,6 +43,7 @@ export default function Layout() {
             </li>
           </ul>
         </nav>
+        <ThemeToggle />
       </header>
 
       <main>
