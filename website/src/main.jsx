@@ -4,6 +4,7 @@ import { HashRouter, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout.jsx'
 import ComingSoon from './pages/ComingSoon.jsx'
 import Eda from './pages/Eda.jsx'
+import Forecast from './pages/Forecast.jsx'
 import './styles.css'
 
 // HashRouter keeps every page working on a static host (GitHub Pages, S3)
@@ -15,7 +16,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route element={<Layout />}>
           <Route index element={<ComingSoon title="See El Niño coming, three months early" />} />
           <Route path="buoy-map" element={<ComingSoon title="Buoy map" />} />
-          <Route path="forecast" element={<ComingSoon title="Try the forecast" />} />
+          <Route path="forecast" element={<Forecast />} />
           <Route path="results" element={<ComingSoon title="Results" />} />
           <Route path="eda" element={<Eda />} />
           <Route path="*" element={<ComingSoon title="Page not found" />} />
